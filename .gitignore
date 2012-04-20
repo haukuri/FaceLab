@@ -25,7 +25,7 @@
 *.maf
 *.mtc
 *.mtc0
-
+*.asv
 /TrainingImages
 /TestImages
 /DebugInfo
