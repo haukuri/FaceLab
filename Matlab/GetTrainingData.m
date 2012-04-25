@@ -1,5 +1,9 @@
 function GetTrainingData(all_ftypes, np, nn)
-
-    LoadSaveImData('../TrainingImages/FACES', ni, im_sfn);
+    % np: number of faces.
+    % nn: number of non faces.
+    LoadSaveImData('../TrainingImages/FACES', np,'FaceData.mat');
+    LoadSaveImData('../TrainingImages/NFACES', nn,'NonFaceData.mat');
+    ComputeSaveFData(all_ftypes, 'FeaturesToUse.mat');
+end
 
     
