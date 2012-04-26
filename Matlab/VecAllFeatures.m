@@ -1,7 +1,7 @@
 function fmat = VecAllFeatures(all_ftypes, W, H)
-    nf = size(all_featues, 1);
+    nf = size(all_ftypes, 1);
     fmat = zeros(W * H, nf);
-    for k = nf
-        fmat(:,k) = VecFeature(all_ftypes(k,:));
+    for k = 1:nf
+        fmat(:,k) = VecFeature(all_ftypes(k,:), W, H);
     end
 end
