@@ -6,14 +6,14 @@ function LoadSaveImData(dirname, ni, im_sfn)
     % LoadSaveImData('../TrainingImages/FACES',100,'gaur.mat')
 
     face_fnames = dir(dirname);
-    ii_ims = cell(ni,1);
+    ii_ims = zeros(ni, 19*19);
     aa = 3:length(face_fnames);
     a = randperm(length(aa));
     fnums = aa(a(1:ni)); 
     for i = 1:ni
         im_nr = fnums(i);
-        im = LoadIm([dirname,'/',face_fnames(im_nr).name]);
-        ii_ims{i} = im;
+        [~,ii_im] = LoadIm([dirname,'/',face_fnames(im_nr).name]);
+        ii_ims(i,:) = ii_im(:);
     end
     save(im_sfn,'dirname', 'fnums', 'ii_ims');
 end
