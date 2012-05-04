@@ -24,6 +24,9 @@ function Cparams = BoostingAlg(Fdata, NFdata, FTdata, T)
     P = zeros(T,1);
     for t = 1:T
         ws = ws/sum(ws);
+%        figure(t)
+%        stem(ws) 
+%        drawnow
         theta = [];
         err = [];
         j_star = [];
@@ -31,22 +34,26 @@ function Cparams = BoostingAlg(Fdata, NFdata, FTdata, T)
         for j = 1:1000
             fs = VecComputeFeature(Images, fmat(:,j));
             [theta2,p2,err2] = LearnWeakClassifier(ws, fs, ys);
-            if j == 1
+            if j == 1 || err2 < err
                 err = err2;
                 theta = theta2;
                 p = p2;
                 j_star = j;
-            elseif err2 < err
-                err = err2;
-                theta = theta2;
-                p = p2;
-                j_star = j;
-            end
+            end 
+            %%%%
+            %if j == 477 && t==2
+            %    disp([j_star,err,err2]);
+            %end
+            %%%%
         end
         THETAS(t) = theta;
         ERRORS(t) = err;
         beta = err/(1-err);
-        ws = ws.*beta.^(1-abs(1-abs(h(fs,p,theta)-ys)));
+        fs = VecComputeFeature(Images, fmat(:,j_star));
+        %ws = ws.*beta.^(1-abs(h(fs,p,theta)-ys));
+        for j = 1:length(ws)
+           ws(j) = ws(j)*beta^(1-abs( (p*fs(j)<p*theta)-ys(j)));
+        end
         ALPHAS(t) = log(1/beta);
         J(t) = j_star;
         P(t) = p;
