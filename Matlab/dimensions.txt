@@ -1,0 +1,14 @@
+name            dim 1           dim 2
+im              h               w
+ii_im	        h               w
+all_ftypes      nf              5
+ftype           1               5
+fs              1               ni
+b_vec           h*w             1
+ftype_vec       h*w             1
+fmat            w*h             nf
+
+h       image height in pixels
+w       image width in pixels
+nf      number of features
+ni      number of images
