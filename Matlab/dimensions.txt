@@ -1,6 +1,7 @@
 name            dim 1           dim 2
 im              h               w
 ii_im	        h               w
+ii_ims          ni              w*h
 all_ftypes      nf              5
 ftype           1               5
 fs              1               ni
