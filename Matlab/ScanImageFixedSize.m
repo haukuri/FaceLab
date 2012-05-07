@@ -17,14 +17,7 @@ function [dets,R,I2] = ScanImageFixedSize(Cparams, im)
     % Compute the square
     im2 = im.*im;
     
-    % Compute the integral images
-    %if std(im(:)) == 0
-    %   im = zeros(size(im));
-    %   im2 = zeros(size(im2));
-    %else
-    %   im = (im - mean(im(:))) / std(im(:));
-    %   im2 = (im2 - mean(im2(:))) / std(im2(:));
-    %end
+
     %ii_im = cumsum(cumsum(im,1),2);
     %ii_im2 = cumsum(cumsum(im2,1),2);
     
