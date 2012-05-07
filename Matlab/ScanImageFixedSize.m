@@ -39,7 +39,7 @@ function dets = ScanImageFixedSize(Cparams, im)
             % The subwindows
             I = ii_im(x:x+18,y:y+18);
             I2 = ii_im2(x:x+18,y:y+18);
-            sc = ApplyDetector(Cparams, ii_im)
+            sc = ApplyDetector(Cparams, I, I2);
             if threshold < sc
                 % this is a face
                 dets = [dets; [x,y,x+w-1,y+h-1]];
