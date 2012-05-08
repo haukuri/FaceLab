@@ -1,4 +1,4 @@
-function [dets,R,I2] = ScanImageFixedSize(Cparams, im)
+function [dets,R,I2,detsc] = ScanImageFixedSize(Cparams, im)
     
     %im = imread(im);
     
@@ -25,9 +25,10 @@ function [dets,R,I2] = ScanImageFixedSize(Cparams, im)
     J = Cparams.Thetas(:,1);
     % the ftypes we use here
     
-    threshold = 6.4;%0.5*sum(Cparams.alphas); 
+    threshold = Cparams.thresh;%0.5*sum(Cparams.alphas); 
     
     dets =[];
+    detsc = [];
     
     L = 19;
     
@@ -62,6 +63,7 @@ function [dets,R,I2] = ScanImageFixedSize(Cparams, im)
             if threshold < sc
                 % this is a face
                 dets = [dets; [x,y,x+18,y+18]];
+                detsc = [detsc; sc];
             end
         end
     end
