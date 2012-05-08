@@ -15,4 +15,5 @@ function DisplayDetections(im, dets)
         plot(x,y,'r-')
     end
     hold off
+    axis equal tight;
 end
