@@ -1,7 +1,7 @@
 function Cparams = BoostingAlg(Fdata, NFdata, FTdata, T)
     
     % Get the image data
-    fmat = FTdata.fmat;
+    fmat = sparse(FTdata.fmat); % sparse drastically improves performance
     N = size(fmat,2);
     faces  = Fdata.ii_ims;
     Nfaces = NFdata.ii_ims;
@@ -11,9 +11,9 @@ function Cparams = BoostingAlg(Fdata, NFdata, FTdata, T)
     % Create the y vector, says which class each image belongse to.
     ys = [ones(nf,1);zeros(nNf,1)];
     % initialize weigths:
-    ws = zeros(6000,1);
-    ws(1:2000) = 1/4000;
-    ws(2001:end) = 1/8000;
+    ws = zeros(nf + nNf,1);
+    ws(1:nf) = 1/(2 * nf);
+    ws(nf+1:end) = 1/(2 * nNf);
     
     h = @(fs,p,theta) p * fs < p * theta;
     

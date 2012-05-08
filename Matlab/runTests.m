@@ -11,12 +11,14 @@ function runTests()
         ret = all(ret);
     end
     tests = {...
-        {'P2:  ComputeBoxSum', 'testComputeBoxSum', 1},...
-        {'P9:  VecBoxSum    ', 'testVecBoxSum', 10},...
-        {'P10: VecFeature   ', 'testVecFeature', 1}};
+        {'P2:  ComputeBoxSum      ', 'testComputeBoxSum', 1},...
+        {'P9:  VecBoxSum          ', 'testVecBoxSum', 10},...
+        {'P10: VecFeature         ', 'testVecFeature', 1},...
+        {'P16: LearnWeakClassifier', 'testLearnWeakClassifier', 1},...
+        {'D6:  Debug Point 6      ', 'debugPoint6', 1}};
     N = length(tests);
     r = zeros(N,1);
-    fprintf('---------- Tests -----------\n');
+    fprintf('-------------- Tests ---------------\n');
     for k = 1:N
         test = tests{k};
         testfcn = test{2};
@@ -34,6 +36,6 @@ function runTests()
             disp(msgs)
         end
     end
-    fprintf('----------------------------\n');
+    fprintf('------------------------------------\n');
     fprintf('%i of %i passed\n', sum(r), N);
 end
