@@ -59,13 +59,13 @@ function [score,f_detected,curve] = ComputeROC(Cparams, Fdata, NFdata)
     % Now we want to compute TPR and FPR for threshold=0:0.5:10
     threshold = 0:0.5:10;
     L = length(threshold);
-    curve = zeros(L,2);
+    curve = zeros(L,3);
     str = cell(1,L);
     for i = 1:L
         thr = threshold(i);
         TPR = sum(score(1:lotF,2)>thr)/lotF;
         FPR = sum(score(lotF+1:end,2)>thr)/lotNF;
-        curve(i,:)=[FPR,TPR];
+        curve(i,:)=[FPR,TPR,thr];
         str{i} = num2str(thr);
     end
     
