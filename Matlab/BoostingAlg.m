@@ -31,7 +31,7 @@ function Cparams = BoostingAlg(Fdata, NFdata, FTdata, T)
         err = [];
         j_star = [];
         p =[];
-        for j = 1:1000
+        for j = 1:N
             fs = VecComputeFeature(Images, fmat(:,j));
             [theta2,p2,err2] = LearnWeakClassifier(ws, fs, ys);
             if j == 1 || err2 < err
