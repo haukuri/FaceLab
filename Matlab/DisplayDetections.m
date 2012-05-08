@@ -1,5 +1,11 @@
 function DisplayDetections(im, dets)
     % dets = [x,y,x+18,y+18]
+    % im is either an image or a path of an image
+    
+    if size(im,1) == 1
+        % im is a path to an image
+        im = imread(im);
+    end
     
     N = size(dets,1);
     
@@ -14,5 +20,6 @@ function DisplayDetections(im, dets)
         y = [y1,y2,y2,y1,y1];
         plot(x,y,'r-')
     end
+    axis equal
     hold off
 end

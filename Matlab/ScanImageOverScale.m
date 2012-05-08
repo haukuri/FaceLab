@@ -15,8 +15,8 @@ function dets = ScanImageOverScale(Cparams, im, min_s, max_s, step_s)
     scales = min_s:step_s:max_s
     
     dets = [];
-    
-    for i = length(scales)
+    length(scales)
+    for i = 1:length(scales)
         s = scales(i);
         im2 = imresize(im,s);
         dets2 = ScanImageFixedSize(Cparams, im2);

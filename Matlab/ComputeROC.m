@@ -24,8 +24,8 @@ function [score,f_detected,curve] = ComputeROC(Cparams, Fdata, NFdata)
     nfimages = setdiff(3:length(nface_fnames),nfnums);
     
     % Length of tests:
-    lotF  = length(fimages);
-    lotNF = length(nfimages);
+    lotF  = length(fimages)
+    lotNF = length(nfimages)
     
     % alphas 
     alphas = Cparams.alphas;

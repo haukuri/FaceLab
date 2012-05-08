@@ -3,11 +3,14 @@ function sc = ApplyDetector(Cparams, ii_im,ii_im2)
     % normilized else if nargin == 3 then ii_im2 is the integral image of
     % the image squared.
 
+    ii_im = double(ii_im);
+    
     mu = [];
     sigma2 = [];
     
     if nargin == 3
         % Cause the faces images are of size 19x19
+        ii_im2 = double(ii_im2);
         L = 19;
         L2 = L*L;
     
