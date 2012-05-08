@@ -1,5 +1,6 @@
-function dets = ScanImageFixedSize(Cparams, im)
-    % im is either an image or a path of an image
+function [dets,R,I2,detsc] = ScanImageFixedSize(Cparams, im)
+    
+    %im = imread(im);
     
     if size(im,1) == 1
         % im is a path to an image
@@ -12,6 +13,7 @@ function dets = ScanImageFixedSize(Cparams, im)
     end
     im = double(im);
     
+    R =[];
     
     % image size
     [h,w]=size(im);
@@ -19,14 +21,22 @@ function dets = ScanImageFixedSize(Cparams, im)
     % Compute the square
     im2 = im.*im;
     
-%     ii_im = cumsum(cumsum(im,1),2);
-%     ii_im2 = cumsum(cumsum(im2,1),2);
-%     L = 19;
+
+    %ii_im = cumsum(cumsum(im,1),2);
+    %ii_im2 = cumsum(cumsum(im2,1),2);
     
+    
+    J = Cparams.Thetas(:,1);
+    % the ftypes we use here
+    
+    threshold = Cparams.thresh;%0.5*sum(Cparams.alphas); 
     
     threshold = 8;%0.5*sum(Cparams.alphas);
     dets =[];
-      
+    detsc = [];
+    
+    L = 19;
+    
     for x = 1:w-18
         for y = 1:h-18
             % The subwindows
@@ -59,6 +69,7 @@ function dets = ScanImageFixedSize(Cparams, im)
             if threshold < sc
                 % this is a face
                 dets = [dets; [x,y,x+18,y+18]];
+                detsc = [detsc; sc];
             end
         end
     end

@@ -22,4 +22,5 @@ function DisplayDetections(im, dets)
     end
     axis equal
     hold off
+    axis equal tight;
 end
