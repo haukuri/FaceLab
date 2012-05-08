@@ -18,10 +18,9 @@ function fdets = PruneDetections(dets)
     end
     [~,C] = graphconncomp(sparse(D));
     fdets = zeros(C(end),4);
-    C
     for i = 1:C(end)
-        dets(find(C==i),:)
-        mean(dets(find(C==i),:))
+        dets(find(C==i),:);
+        mean(dets(find(C==i),:));
         fdets(i,:) = round(mean(dets(find(C==i),:),1));
     end
 end
