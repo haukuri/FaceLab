@@ -7,7 +7,6 @@ function [fg, sc] = ApplyCascade(CCparams, ii_im)
     fg = 1;
     i = 1;
     
-    threshold = 6.4;
     
     while fg == 1 && i<=N
         Cparams = CCparams{i};
@@ -16,6 +15,7 @@ function [fg, sc] = ApplyCascade(CCparams, ii_im)
         fmat = Cparams.fmat(:,J);
         theta = Cparams.Thetas(:,2);
         p = Cparams.Thetas(:,3);
+        threshold = Cparams.thresh;
         
         sc = 0;
         for j = 1:length(alpha)
