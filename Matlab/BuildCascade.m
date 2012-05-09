@@ -20,12 +20,14 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
     
     i = 0;
     while fpr > fpr_target
-        i = i + 1
+        i = i + 1;
         Cparams = tCparams; % new Cparams
         [ii_ims,ys,ws] = mkTrainingParameters(P, N);
         T = 0;
+        fpr = 1;
         while fpr > f * fpr_last
-            T = T + 1
+            
+            T = T + 1;
             ws = ws/sum(ws);
             [Cparams, ws] = ...
                 BoostingAlg_AddFeature(Cparams, ws, ii_ims, ys);
@@ -48,9 +50,10 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
                 ChooseThreshold(Cparams, ii_ims, ys, target_tpr);
             CCparams{i}.thresh = thresh;
             pos = score >= thresh;
+            fpr_last = fpr;
             fpr = sum((ysv(pos) == 0)) / sum(~ysv);
             tpr = sum((ysv(pos) == 1)) / sum(ysv);
-            fpr_last = fpr;
+            fprintf('i = %i\nT = %i\nfpr = %g\nfpr_last = %g\n', i, T, fpr, fpr_last)
         end
         if fpr > fpr_target
             M = size(ii_ims, 1);
