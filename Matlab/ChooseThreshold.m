@@ -18,15 +18,15 @@ function [thresh, tpr, fpr] = ChooseThreshold(Cparams, ii_ims, ys, target_tpr)
     
     % Now we want to try different thresholds:
     
-    thresholds = 0:0.25:10;
+    thresholds = 0:0.01:10;
     L = length(thresholds);
     TPR = zeros(L,1); % True positive rate
     FPR = zeros(L,1); % False positive rate
     
     for i = 1:L
         thr = thresholds(i);
-        TPR(i) = sum(score(ys)>thr)/sum(ys);
-        FPR(i) = sum(score(n_ys)>thr)/sum(n_ys);
+        TPR(i) = sum(score(ys)>=thr)/sum(ys);
+        FPR(i) = sum(score(n_ys)>=thr)/sum(n_ys);
     end
     
     % Find the threshold that has TPR closests to target_tpr

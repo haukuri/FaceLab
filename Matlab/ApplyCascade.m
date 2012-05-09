@@ -15,7 +15,7 @@ function [fg, sc] = ApplyCascade(CCparams, ii_im)
         fmat = Cparams.fmat(:,J);
         theta = Cparams.Thetas(:,2);
         p = Cparams.Thetas(:,3);
-        threshold = Cparams.thresh;
+        
         
         sc = 0;
         for j = 1:length(alpha)
@@ -23,7 +23,8 @@ function [fg, sc] = ApplyCascade(CCparams, ii_im)
             sc = sc + alpha(j)*(p(j) * fs < p(j) * theta(j)); 
         end
         
-        if sc < threshold
+        
+        if (i < N) && (sc < Cparams.thresh)
             fg = 0;
             sc = [];
         end
