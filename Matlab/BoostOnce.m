@@ -1,6 +1,6 @@
 function [theta, alpha, err, j_star, p, ws] = BoostOnce(ws, ii_ims, ys, fmat)
     N = size(fmat,2);
-    for j = 1:N
+    for j = 1:1000
         fs = VecComputeFeature(ii_ims, fmat(:,j));
         [theta2,p2,err2] = LearnWeakClassifier(ws, fs, ys);
         if j == 1 || err2 < err
