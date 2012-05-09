@@ -29,9 +29,8 @@ function [dets,R,I2,detsc] = ScanImageFixedSize(Cparams, im)
     J = Cparams.Thetas(:,1);
     % the ftypes we use here
     
-    threshold = Cparams.thresh;%0.5*sum(Cparams.alphas); 
+    threshold = Cparams.thresh;%0.5*sum(Cparams.alphas);
     
-    threshold = 8;%0.5*sum(Cparams.alphas);
     dets =[];
     detsc = [];
     
