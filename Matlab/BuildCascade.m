@@ -55,44 +55,50 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
                     score(n) = sc;
                 end
             end
-            stem(score); drawnow;
+%             figure(1)
+%             stem(score); drawnow;
             
             % Choose a threshold
             target_tpr = d * tpr_last;
-            tpr = 1;
-            upper = max(score);
-            lower = 0;
-            thresh = mean([upper, lower]);
-            while 1
-                fprintf('Testing threshold %g\n', thresh);
-                [tpr,fpr] = TestThreshold(ysv, score, thresh);
-                if tpr >= target_tpr
-                    lower = thresh;
-                    if tpr - target_tpr < 0.01
-                        fprintf('Found threshold at %g\n', thresh);
-                        break
-                    end
-                else
-                    upper = thresh;
-                end
-                thresh = mean([upper, lower]);
-            end
-            CCparams{i}.thresh = thresh;
-            
-%             [thresh, tpri, fpri] = ...
-%                 ChooseThreshold(Cparams, ii_ims, ys, target_tpr);
+%             dthr = 0.001;
+%             thr = 0;
+%             [tpri,fpri] = TestThreshold(ysv, score, thr);
+% %             figure(2)
+% %             plot(thr, tpri, 'o', thr, fpri, 'x')
+% %             legend('True Positive', 'False Positive')
+% %             hold on
+%             while 1
+%                 tpri_last = tpri;
+%                 fpri_last = fpri;
+%                 thr_last = thr;
+%                 thr = thr + dthr;
+%                 [tpri,fpri] = TestThreshold(ysv, score, thr);
+%                 if tpri < target_tpr
+%                     tpr = tpri_last;
+%                     fpr = fpri_last;
+%                     thresh = thr_last;
+%                     break
+%                 end
+% %                 plot(thr, tpri, 'o', thr, fpri, 'x');
+% %                 drawnow;
+%             end
+%             hold off
 %             CCparams{i}.thresh = thresh;
-%             pos = score >= thresh;
-%             fpr_t = sum((ysv(pos) == 0)) / sum(~ysv);
-%             tpr_t = sum((ysv(pos) == 1)) / sum(ysv);
-%             fpr = fpri * fpr_last;
-%             tpr = tpri * tpr_last;
+            
+            [thresh, tpri, fpri] = ...
+                ChooseThreshold(Cparams, ii_ims, ys, target_tpr);
+            CCparams{i}.thresh = thresh;
+            pos = score >= thresh;
+            fpr_t = sum((ysv(pos) == 0)) / sum(~ysv);
+            tpr_t = sum((ysv(pos) == 1)) / sum(ysv);
+            fpr = fpri * fpr_last;
+            tpr = tpri * tpr_last;
 
-            fprintf('i = %i\nT = %i\nfpr = %g\nfpr_last = %g\n', i, T, fpr, fpr_last)
-            if (fpr < fpr_target)
-                disp('Breaking out of inner loop');
-                break;
-            end
+            fprintf('i = %i\t\t\t\tT = %i\n', i, T)
+            fprintf('fpr = %g\t\t\tfpr_last = %g\n', fpr, fpr_last)
+            fprintf('tpr = %g\t\t\t\ttpr_last = %g\n', tpr, tpr_last)
+            fprintf('target_tpr = %g\tthreshold = %g\n\n', target_tpr, thresh)
+            
         end
         fpr_last = fpr;
         tpr_last = tpr;
