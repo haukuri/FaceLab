@@ -71,7 +71,7 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
             % Find the highest threshold for which the TPR is at least d *
             % tpr_last and update the strong classifier to have that
             % threshold.
-            thrs = linspace(0 ,max(score), 100);
+            thrs = linspace(0 ,max(score), 1000);
             [tprs,fprs] = TestThresholds(ysv, score, thrs);
             [CCparams{i}.thresh,idx] = max(thrs(tprs >= d * tpr_last));
             
@@ -93,12 +93,12 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
             fprintf('fpr = %g\t\t\tfpr_last = %g\n', fpr, fpr_last)
             fprintf('tpr = %g\t\t\t\ttpr_last = %g\n', tpr, tpr_last)
             fprintf('target_tpr = %g\tthreshold = %g\n\n', d * tpr_last, CCparams{i}.thresh)
-            fprintf('length(N) = %g\n', size(N,2))
+            fprintf('length(N) = %g\n', size(N,1))
             
         end
         
-        fpr_last = fpr;
-        tpr_last = tpr;
+        fpr_last = f * fpr_last;
+        tpr_last = d * tpr_last;
         
         % Remove all but the false positives from the training set of
         % negative images
