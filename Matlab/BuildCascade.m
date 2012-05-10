@@ -72,9 +72,16 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
             % Find the highest threshold for which the TPR is at least d *
             % tpr_last and update the strong classifier to have that
             % threshold.
-            thrs = linspace(0 ,max(score), 1000);
-            [tprs,fprs] = TestThresholds(ysv, score, thrs);
-            [CCparams{i}.thresh,idx] = max(thrs(tprs >= d * tpr_last));
+            %thrs = linspace(0 ,max(score), 1000);
+            %[tprs,fprs] = TestThresholds(ysv, score, thrs);
+            %[CCparams{i}.thresh,idx] = max(thrs(tprs >= d * tpr_last));
+            
+            % Set the true- and false positive rates to fit the threshold
+            %tpr = tprs(idx);
+            %fpr = fprs(idx);
+            
+            [thresh, tpr, fpr] = ChooseThreshold(Cparams, ii_imsv, ysv, d * tpr_last);
+            CCparams{i}.thresh = thresh;
             
             % Debug
             figure(1)
@@ -86,9 +93,7 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
             hold off
             % /Debug
             
-            % Set the true- and false positive rates to fit the threshold
-            tpr = tprs(idx);
-            fpr = fprs(idx);
+            
             
             fprintf('i = %i\t\t\t\tT = %i\n', i, T)
             fprintf('fpr = %g\t\t\tfpr_last = %g\n', fpr, fpr_last)

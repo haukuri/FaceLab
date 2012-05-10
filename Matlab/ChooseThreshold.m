@@ -18,7 +18,7 @@ function [thresh, tpr, fpr] = ChooseThreshold(Cparams, ii_ims, ys, target_tpr)
     
     % Now we want to try different thresholds:
     
-    thresholds = 0:0.01:10;
+    thresholds = 0:0.01:15;
     L = length(thresholds);
     TPR = zeros(L,1); % True positive rate
     FPR = zeros(L,1); % False positive rate
