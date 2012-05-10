@@ -28,6 +28,9 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
     % The number of strong classifiers in the cascade
     i = 0;
     
+    % Initialize the weights
+    ws = mkWeights(P, N);
+    
     while fpr > fpr_target
         i = i + 1;
         
@@ -38,18 +41,16 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
         % iteration and to reset the weights for the next strong
         % classifier.
         ys = mkYs(P, N);
-        ws = mkWeights(P, N);
+        ws = mkWeights(P, N);        
         ii_ims = [P;N];
         
         % The number of weak classifiers in this strong classifier
         T = 0;
         
-        fpr = 1; % to enter the loop
         while (fpr > f * fpr_last)
             T = T + 1;
             
-            % Normalize the weight vector and train a new weak classifier.
-            ws = ws/sum(ws);
+            % Train a new weak classifier.
             [Cparams, ws] = ...
                 BoostingAlg_AddFeature(Cparams, ws, ii_ims, ys);
             
@@ -97,8 +98,8 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
             
         end
         
-        fpr_last = f * fpr_last;
-        tpr_last = d * tpr_last;
+        fpr_last = fpr;
+        tpr_last = tpr;
         
         % Remove all but the false positives from the training set of
         % negative images
@@ -111,6 +112,9 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
             end
         end
         pos = score >= CCparams{i}.thresh;
+         %pws = ws(ys == 1);
+         %nws = ws(ys(pos) == 0);
+         %ws = [pws;nws];
         N = ii_ims(ys(pos) == 0,:);
     end
 end
