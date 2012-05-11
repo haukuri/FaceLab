@@ -32,8 +32,12 @@ function [thresh, tpr, fpr] = ChooseThreshold(Cparams, ii_ims, ys, target_tpr)
     % Find the threshold that has TPR closests to target_tpr
     %TPRm = TPR(TPR > target_tpr); % need this to satisfy BuildCascade
     %assert(~isempty(TPRm), 'No tpr > target_tpr found');
-    [~,argmin_Target_TPR] = min(abs(target_tpr-TPR));
-    thresh = thresholds(argmin_Target_TPR);
-    tpr = TPR(argmin_Target_TPR);
-    fpr = FPR(argmin_Target_TPR);
+%     [~,argmin_Target_TPR] = min(abs(target_tpr-TPR));
+%     thresh = thresholds(argmin_Target_TPR);
+%     tpr = TPR(argmin_Target_TPR);
+%     fpr = FPR(argmin_Target_TPR);
+    [thresh,i] = max(thresholds(TPR >= target_tpr));
+    tpr = TPR(i);
+    fpr = FPR(i);
+
 end
