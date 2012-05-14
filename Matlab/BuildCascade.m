@@ -88,12 +88,12 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
             % Debug
             figure(1)
             npos = length(ysv(ysv == 1));
-            plot(1:npos,score(1:npos), npos+1:length(ysv), 'b+')
-            plot(score(npos+1:end), 'r-'); 
+            plot(1:npos, score(1:npos), 'b+')
+            hold on;
+            plot(npos+1:length(ysv), score(npos+1:end), 'r.'); 
             ylabel('score')
             xlabel('image nr')
-            hold on;
-            plot([1 length(ysv)], CCparams{i}.thresh * ones(2,1),'r')
+            plot([1 length(ysv)], CCparams{i}.thresh * ones(2,1),'g')
             hold off
             % /Debug
             
