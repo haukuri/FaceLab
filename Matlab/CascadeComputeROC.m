@@ -74,13 +74,13 @@ function [score,f_detected,curve] = CascadeComputeROC(CCparams, Fdata, NFdata)
     str = cell(1,L);
     for i = 1:L
         thr = threshold(i);
-        TPR = sum(score(1:lotF,2)>thr)/lotF;
-        FPR = sum(score(lotF+1:end,2)>thr)/lotNF;
+        TPR = sum(score(1:lotF,2)>=thr)/lotF;
+        FPR = sum(score(lotF+1:end,2)>=thr)/lotNF;
         curve(i,:)=[FPR,TPR,thr];
         str{i} = num2str(thr);
     end
     
-    plot(curve(:,1),curve(:,2))
-    xlabel('FPR')
-    ylabel('TPR')
+    %plot(curve(:,1),curve(:,2))
+    %xlabel('FPR')
+    %ylabel('TPR')
 end

@@ -83,7 +83,7 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
             %fpr = fprs(idx);
             
             % Choose the threshold
-            [thresh, tprs, fprs] = ChooseThreshold(CCparams, ii_imsv, ysv, d * tpr_last);
+            [thresh, tprs, fprs] = ChooseThreshold(Cparams, ii_imsv, ysv, d);
             CCparams{i}.thresh = thresh;
             
             % Calculate the fpr and tpr for the cascade
@@ -107,11 +107,12 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
             figure(2)
             plot(curve(:,1),curve(:,2), 'bo-')
             hold on
-            plot(fpr, tpr, 'rx')
+            plot(fprs, tprs, 'rx')
             hold off
             axis([-0.05 1.01 -0.05 1.01])
             xlabel('FPR')
             ylabel('TPR')
+            title(sprintf('ROC curve for strong classifier %I', i))
             drawnow;
             % /Debug
             
@@ -131,9 +132,9 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
         ii_ims = [P;N];
         
         % Do the same for the negatives
-        %Nv = PruneNegatives(ii_imsv, ysv, CCparams, i);
-        %ii_imsv = [Pv;Nv];
-        %ysv = mkYs(Pv, Nv);
+        Nv = PruneNegatives(ii_imsv, ysv, CCparams, i);
+        ii_imsv = [Pv;Nv];
+        ysv = mkYs(Pv, Nv);
         
 %         
 %         M = size(ii_ims, 1);

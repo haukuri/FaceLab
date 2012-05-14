@@ -12,7 +12,6 @@ function LoadSaveImData(dirname, ni, im_sfn)
     fnums = aa(a(1:ni)); 
     for i = 1:ni
         im_nr = fnums(i);
-        fprintf('Loading %s\n', face_fnames(im_nr).name); 
         [~,ii_im] = LoadIm([dirname,'/',face_fnames(im_nr).name]);
         ii_ims(i,:) = ii_im(:);
     end

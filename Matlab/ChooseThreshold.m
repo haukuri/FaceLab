@@ -10,15 +10,28 @@ function [thresh, tpr, fpr] = ChooseThreshold(Cparams, ii_ims, ys, target_tpr)
     % Score of each image:
     score =zeros(N,1);
     
-    % calculate the score for each images:
-    for i = 1:N
-        ii_im = ii_ims(i,:);
-        score(i) = ApplyDetector(Cparams, ii_im);
+    % calculate the score for each image:
+    % use the correct apply function depending on whether we have a
+    % cascaded or non-cascaded detector
+    if iscell(Cparams)
+        for i = 1:N
+            ii_im = ii_ims(i,:);
+            [not_rejected_earlier,s] = ApplyCascade(Cparams, ii_im);
+            if not_rejected_earlier
+                score(i) = s;
+            end
+        end
+    else
+        for i = 1:N
+            ii_im = ii_ims(i,:);
+            score(i) = ApplyDetector(Cparams, ii_im);
+        end
     end
+    
     
     % Now we want to try different thresholds:
     
-    thresholds = 0:0.01:15;
+    thresholds = 0:0.001:15;
     L = length(thresholds);
     TPR = zeros(L,1); % True positive rate
     FPR = zeros(L,1); % False positive rate

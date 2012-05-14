@@ -1,4 +1,4 @@
-function doGenerateTrainingData(np,nn);
+function doGenerateTrainingData(np,nn)
     debug = loadDebug();
     if nargin == 0
         np = debug{5}.np;
