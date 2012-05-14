@@ -10,6 +10,11 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
     % The validation set
     ysv = mkYs(Pv, Nv);
     ii_imsv = [Pv;Nv];
+    lenF = size(Fdata.ii_ims,1);
+    lenNF = size(NFdata.ii_ims,1);
+    vFdata = SliceDataStruct(Fdata, pF + 1, lenF);
+    vNFdata = SliceDataStruct(NFdata, pNF + 1, lenNF);
+    
     
     % The cascaded classifier
     CCparams = {};
@@ -43,7 +48,7 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
         T = 0;
         
         fprintf('\ni = %i\ttarget_tpr = %g\ttarget_fpr = %g\n', i, d * tpr_last, f * fpr_last)
-        fprintf('T = %i\t# of N = %g\t\t#of Nv = %g\n', T, size(N,1), size(Nv,1))
+        fprintf('# of N = %g\t\t# of Nv = %g\n', size(N,1), size(Nv,1))
         while (fpr > f * fpr_last)
             T = T + 1;
             
@@ -53,7 +58,7 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
             
             % Update the cascaded classifier to include the changed strong
             % classifier.
-            CCparams{i} = Cparams;
+            CCparams{i} = Cparams;  %#ok<*AGROW>
             
             % Evaluate the current cascaded detector, including this latest
             % classifier, on the validation set.
@@ -78,7 +83,7 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
             %fpr = fprs(idx);
             
             % Choose the threshold
-            [thresh, tprs, fprs] = ChooseThreshold(Cparams, ii_imsv, ysv, d * tpr_last);
+            [thresh, tprs, fprs] = ChooseThreshold(CCparams, ii_imsv, ysv, d * tpr_last);
             CCparams{i}.thresh = thresh;
             
             % Calculate the fpr and tpr for the cascade
@@ -95,9 +100,22 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
             xlabel('image nr')
             plot([1 length(ysv)], CCparams{i}.thresh * ones(2,1),'g')
             hold off
+            
+            
+            %[~,~,curve] = CascadeComputeROC(CCparams, vFdata, vNFdata);
+            curve = curveGuy(score, ysv);
+            figure(2)
+            plot(curve(:,1),curve(:,2), 'bo-')
+            hold on
+            plot(fpr, tpr, 'rx')
+            hold off
+            axis([-0.05 1.01 -0.05 1.01])
+            xlabel('FPR')
+            ylabel('TPR')
+            drawnow;
             % /Debug
             
-            fprintf('fpr = %g\ttpr = %g\tthreshold = %g\n', fpr, tpr, CCparams{i}.thresh)
+            fprintf('T = %i\tfpr = %g\ttpr = %g\tthreshold = %g\n', T, fpr, tpr, CCparams{i}.thresh)
             
             
         end
@@ -113,9 +131,9 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
         ii_ims = [P;N];
         
         % Do the same for the negatives
-        Nv = PruneNegatives(ii_imsv, ysv, CCparams, i);
-        ii_imsv = [Pv;Nv];
-        ysv = mkYs(Pv, Nv);
+        %Nv = PruneNegatives(ii_imsv, ysv, CCparams, i);
+        %ii_imsv = [Pv;Nv];
+        %ysv = mkYs(Pv, Nv);
         
 %         
 %         M = size(ii_ims, 1);
