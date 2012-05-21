@@ -8,6 +8,9 @@ function [theta,p,err] = LearnWeakClassifier(ws, fs, ys)
     %   theta [1 x 1] threshold
     %   p [1 x 1] parity
     %   err [1 x 1] classification error;
+    
+    %[theta,eneg,epos] = LearnWeakClassifier_helper(ws,fs,ys);
+
     mup = sum(ws .* fs .* ys) / sum(ws .* ys);
     mun = sum(ws .* fs .* (1 - ys)) / sum(ws .* (1 - ys));
     theta = 0.5 * (mup + mun);
@@ -16,6 +19,9 @@ function [theta,p,err] = LearnWeakClassifier(ws, fs, ys)
 %     epos = sum(ws .* abs(ys - h(fs,1,theta)));
     eneg = sum(ws .* abs(ys - (fs > theta)));
     epos = sum(ws .* abs(ys - (fs < theta)));
+    
+    
+    
     es = [eneg,epos];
     ps = [-1,1];
     [~,i] = min(es);
