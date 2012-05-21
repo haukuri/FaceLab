@@ -47,9 +47,9 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
         % The number of weak classifiers in this strong classifier
         T = 0;
         
-        fprintf('\ni = %i\ttarget_tpr = %g\ttarget_fpr = %g\n', i, d * tpr_last, f * fpr_last)
+        fprintf('\ni = %i\ttarget_tpr = %g\ttarget_fpr = %g\n', i, d^i, f * fpr_last)
         fprintf('# of N = %g\t\t# of Nv = %g\n', size(N,1), size(Nv,1))
-        while (fpr > f * fpr_last)
+        while (fpr > max(f * fpr_last, fpr_target))
             T = T + 1;
             
             % Train a new weak classifier.
@@ -71,40 +71,33 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
                 end
             end
             
-            % Find the highest threshold for which the TPR is at least d *
-            % tpr_last and update the strong classifier to have that
-            % threshold.
-            %thrs = linspace(0 ,max(score), 1000);
-            %[tprs,fprs] = TestThresholds(ysv, score, thrs);
-            %[CCparams{i}.thresh,idx] = max(thrs(tprs >= d * tpr_last));
-            
-            % Set the true- and false positive rates to fit the threshold
-            %tpr = tprs(idx);
-            %fpr = fprs(idx);
             
             % Choose the threshold
-            [thresh, tprs, fprs] = ChooseThreshold(Cparams, ii_imsv, ysv, d);
+            target_tpr = d^i;
+            [thresh, tprs, fprs] = ChooseThreshold(Cparams, ii_imsv, ysv, target_tpr);
             CCparams{i}.thresh = thresh;
             
             % Calculate the fpr and tpr for the cascade
             fpr = fprs * fpr_last;
             tpr = tprs * tpr_last;
+            %tpr = tprs * tpr_last;
             
             % Debug
             figure(1)
+            subplot(1,2,1)
             npos = length(ysv(ysv == 1));
             plot(1:npos, score(1:npos), 'b+')
             hold on;
             plot(npos+1:length(ysv), score(npos+1:end), 'r.'); 
             ylabel('score')
             xlabel('image nr')
+            title('Scores')
             plot([1 length(ysv)], CCparams{i}.thresh * ones(2,1),'g')
             hold off
             
-            
             %[~,~,curve] = CascadeComputeROC(CCparams, vFdata, vNFdata);
             curve = curveGuy(score, ysv);
-            figure(2)
+            subplot(1,2,2);
             plot(curve(:,1),curve(:,2), 'bo-')
             hold on
             plot(fprs, tprs, 'rx')
@@ -120,9 +113,7 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
             
             
         end
-        
         fpr_last = fpr;
-        tpr_last = tpr;
         
         % Remove all but the false positives from the training set of
         % negative images
@@ -131,24 +122,9 @@ function CCparams = BuildCascade(Fdata, NFdata, FTdata, fpr_target, f, d, p)
         ws = mkWeights(P, N);        
         ii_ims = [P;N];
         
-        % Do the same for the negatives
-        Nv = PruneNegatives(ii_imsv, ysv, CCparams, i);
-        ii_imsv = [Pv;Nv];
-        ysv = mkYs(Pv, Nv);
-        
-%         
-%         M = size(ii_ims, 1);
-%         score = zeros(M,1);
-%         for n = 1:M
-%             [fg, sc] = ApplyCascade(CCparams, ii_ims(n,:));
-%             if fg
-%                 score(n) = sc;
-%             end
-%         end
-%         pos = score >= CCparams{i}.thresh;
-%          %pws = ws(ys == 1);
-%          %nws = ws(ys(pos) == 0);
-%          %ws = [pws;nws];
-%         N = ii_ims(ys(pos) == 0,:);
+        % Do the same for the negatives in the validation set
+%         Nv = PruneNegatives(ii_imsv, ysv, CCparams, i);
+%         ii_imsv = [Pv;Nv];
+%         ysv = mkYs(Pv, Nv);
     end
 end
